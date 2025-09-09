@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>My Files</h2>
+<p>Storage used: {{ (used / (1024*1024)) | round(2) }} MB / {{ (quota / (1024*1024*1024)) | round(2) }} GB</p>
+<p><a href="/upload">Upload a file</a></p>
+<table>
+  <thead>
+    <tr><th>Name</th><th>Size</th><th>Uploaded</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+  {% for f in files %}
+    <tr>
+      <td>{{ f.filename }}</td>
+      <td>{{ (f.size_bytes/1024) | round(2) }} KB</td>
+      <td>{{ f.uploaded_at }}</td>
+      <td>
+        <a href="/download/{{ f.id }}">Download</a>
+        <form method="post" action="/delete/{{ f.id }}" style="display:inline" onsubmit="return confirm('Delete this file?')">
+          <button type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="4">No files yet.</td></tr>
